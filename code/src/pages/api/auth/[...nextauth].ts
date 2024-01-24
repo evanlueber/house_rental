@@ -50,7 +50,7 @@ export const authOptions: AuthOptions = {
     }),
   ],
   pages: {
-    signIn: "/",
+    signIn: "/api/auth/signin",
   },
   debug: process.env.NODE_ENV === "development",
   session: {

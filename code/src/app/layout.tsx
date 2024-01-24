@@ -3,6 +3,7 @@ import Navbar from '@/app/components/navbar/Navbar';
 import LoginModal from '@/app/components/modals/LoginModal';
 import RegisterModal from '@/app/components/modals/RegisterModal';
 import ToasterProvider from '@/app/providers/ToasterProvider';
+import getCurrentUser from './actions/getCurrentUser';
 
 import './globals.css'
 import ClientOnly from './components/ClientOnly';
@@ -20,6 +21,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const currentUser = await getCurrentUser();
 
   return (
     <html lang="en">

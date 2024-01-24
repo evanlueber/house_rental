@@ -4,9 +4,16 @@ import Container from "../Container";
 import Logo from "./Logo";
 import About from "./About";
 import UserMenu from "./UserMenu";
-import { Rent } from "./Rent";
+import { SafeUser } from "@/app/types";
 
-const Navbar = () => {
+interface NavbarProps {
+  currentUser?: SafeUser | null;
+}
+
+const Navbar: React.FC<NavbarProps> = ({
+  currentUser
+}) => {
+  console.log({ currentUser })
   return (
     <div className="fixed w-full bg-black bg-opacity-40 z-10 shadow-sm shadow-gray-300 text-black">
       <div className="py-4 border-b ">
@@ -14,10 +21,9 @@ const Navbar = () => {
           <div className="flex flex-row items-center justify-between gap-3 md:gap-0">
             <Logo />
             <div className=" flex flex-row gap-5">
-              <Rent />
               <About />
             </div>
-            <UserMenu />
+            <UserMenu currentUser={currentUser} />
           </div>
         </Container>
       </div>

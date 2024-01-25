@@ -12,6 +12,7 @@ const UserMenu = ({ currentUser }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [registerOpen, setRegisterOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const toggleIsOpen = useCallback(() => {
     setIsOpen((isOpen) => !isOpen);
@@ -22,9 +23,9 @@ const UserMenu = ({ currentUser }) => {
       <div className="flex flex-row items-center gap-3 ">
         <div
           onClick={() => {}}
-          className="hidden md:block text-lg py-3 px-4 rounded-full hover:bg-[#1F1F1F] transition cursor-pointer"
+          className={"  text-lg py-3 px-4 rounded-full hover:bg-[#1F1F1F] transition cursor-pointer " + !loggedIn ? "hidden" : "block "}
         >
-          Your Home
+          Neuer Eintrag +
         </div>
         <div
           onClick={toggleIsOpen}
@@ -42,14 +43,15 @@ const UserMenu = ({ currentUser }) => {
           <div className="flex flex-col cursor-pointer">
             {currentUser ? (
               <>
+                <MenuItem onClick={() => {}} label="Meine Einträge" />
                 <MenuItem onClick={() => signOut()} label="Logout" />
               </>
             ) : (
               <>
-                <MenuItem onClick={() => setLoginOpen(true)} label="Login" />
+                <MenuItem onClick={() => setLoginOpen(true)} label="Anmelden" />
                 <MenuItem
                   onClick={() => setRegisterOpen(true)}
-                  label="Sign Up"
+                  label="Registrieren"
                 />
               </>
             )}
@@ -111,17 +113,17 @@ const UserMenu = ({ currentUser }) => {
                 <IoMdClose size={18} />
               </button>
               <div className=" font-semibold text-center pb-10 text-2xl">
-                Einloggen
+                Anmelden
               </div>
               <div className="flex flex-col gap-4">
                 <Input id="email" label="Email" required />
                 <Input
                   id="password"
-                  label="Password"
+                  label="Passwort"
                   type="password"
                   required
                 />
-                <Button label="Registrieren" onClick={() => {}} outline small />
+                <Button label="Anmelden" onClick={() => {}} outline small />
               </div>
             </div>
           </div>
@@ -181,16 +183,21 @@ const UserMenu = ({ currentUser }) => {
               >
                 <IoMdClose size={18} />
               </button>
-              <div className="text-2xl text-center pb-10 font-semibold">Registrieren</div>
+              <div className="text-2xl text-center pb-10 font-semibold">
+                Registrieren
+              </div>
               <div className="flex flex-col gap-4">
                 <Input id="email" label="Email" required />
                 <Input id="name" label="Name" required />
                 <Input
                   id="password"
-                  label="Password"
+                  label="Passwort"
                   type="password"
                   required
                 />
+                <Input id="address" label="Addresse" required />
+                <Input id="city" label="Stadt" required />
+                <Input id="postalCode" label="PLZ" required />
                 <Button label="Registrieren" onClick={() => {}} outline small />
               </div>
             </div>

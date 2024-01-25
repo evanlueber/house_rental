@@ -8,7 +8,7 @@ export default function Home() {
     
   return (
     <div className="grid grid-cols-5 gap-5">
-      {entrys.map((entry) => (
+      {entrys.map(entry => (
         <Card image={entry.image} description={entry.price} />
       ))}
     </div>

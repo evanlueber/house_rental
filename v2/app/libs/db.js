@@ -1,6 +1,6 @@
 require("dotenv").config();
 import mongoose from "mongoose";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import User from "./User";
 import Entry from "./Entry";
 const saltRounds = 10;
@@ -55,6 +55,9 @@ const register = async (
 
 const getEntrys = async () => {
   const entries = await Entry.find().exec();
+  if (!entries) {
+    return null;
+  }
   return entries;
 };
 
@@ -94,13 +97,9 @@ const createEntry = async (
     userId,
     amenities,
   });
+  await entry.save();
   return entry;
 };
-
-const getUser = async (email) => {
-  const user = User.findOne({ email: email }).exec();
-  return user;
-}
 
 const db = {
   login,
@@ -109,8 +108,7 @@ const db = {
   getEntry,
   getEntrysByUserId,
   createEntry,
-  checkUser,
-  getUser
+  checkUser
 };
 
 export default db;

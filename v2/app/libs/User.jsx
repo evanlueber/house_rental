@@ -11,5 +11,5 @@ const userShema = new Schema({
     postal: String,
 });
 
-const User = mongoose.models.User || mongoose.model("User", userShema);
+const User =  mongoose.models.User || mongoose.model('User', userShema);
 export default User;

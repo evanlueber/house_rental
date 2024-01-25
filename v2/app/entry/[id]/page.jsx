@@ -1,9 +1,9 @@
 import React from "react";
-import Button from "./Button";
-import db from "../libs/db";
+import Button from "../../components/Button";
+import db from "../../libs/db";
 
-const Entry = () => {
-  const entry = db.getEntry()
+const page = ({ params }) => {
+  const entry = db.getEntry(params.id);
   return (
     <div className="grid grid-cols-2">
       <div className="flex flex-col w-1/2 h-screen">
@@ -34,4 +34,4 @@ const Entry = () => {
   );
 };
 
-export default Entry;
+export default page;

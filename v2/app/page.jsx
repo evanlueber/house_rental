@@ -1,12 +1,16 @@
-'use client'
-import React from 'react';
+"use client";
+import React from "react";
+import Card from "/app/components/Card";
+import db from "./libs/db";
 
-function Home() {
+export default function Home() {
+  const entrys = db.getEntrys();
+    
   return (
-    <div>
-      <h1>Home</h1>
+    <div className="grid grid-cols-5 gap-5">
+      {entrys.map((entry) => (
+        <Card image={entry.image} description={entry.price} />
+      ))}
     </div>
   );
 }
-
-export default Home;

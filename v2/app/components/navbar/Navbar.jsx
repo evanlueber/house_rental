@@ -6,9 +6,7 @@ import About from "./About";
 import UserMenu from "./UserMenu";
 import Rent from "./Rent";
 
-const Navbar = ({
-  currentUser
-}) => {
+const Navbar = () => {
   return (
     <div className="fixed w-full bg-black bg-opacity-40 z-10 shadow-sm shadow-gray-300 text-black">
       <div className="py-4 border-b ">
@@ -19,7 +17,7 @@ const Navbar = ({
               <Rent />
               <About />
             </div>
-            <UserMenu currentUser={currentUser} />
+            <UserMenu />
           </div>
         </Container>
       </div>

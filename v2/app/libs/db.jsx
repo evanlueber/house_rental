@@ -1,66 +1,116 @@
 require("dotenv").config();
-const mongoose = require("mongoose");
-
-const bcrypt = require("bcrypt");
+import mongoose from "mongoose";
+import bcrypt from "bcrypt";
+import User from "./User";
+import Entry from "./Entry";
 const saltRounds = 10;
 
 const uri = process.env.DATABASE_URL;
 
-mongoose.connect(
-  `${uri}`,
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+mongoose.connect(`${uri}`);
+
+const login = async (
+  email,
+  password
+) => {
+  const user = await User.findOne({ email: email }).exec();
+  if (!user || !user.password) {
+    return null;
   }
-);
+  const match = await bcrypt
+    .compare(password, user.password)
+    .then((res) => res);
+  if (!match) {
+    return null;
+  }
+  return user;
+};
 
-const userShema = new mongoose.Schema({
-  email: String,
-  name: String,
-  password: String,
-  createdAt: { type: Date, default: Date.now() },
-  updatedAt: { type: Date, default: Date.now() },
-  address: String,
-  city: String,
-  postal: String,
-  liked: Array,
-});
+const checkUser = async (email) => {
+  const user = await User.findOne({ email: email }).exec();
+  return user;
+};
 
-const User = mongoose.model("user", userShema);
+const register = async (
+  email,
+  name,
+  password,
+  address,
+  city,
+  postal
+) => {
+  const salt = await bcrypt.genSalt(saltRounds);
+  const hash = await bcrypt.hash(password, salt);
+  const user = new User({
+    email: email,
+    password: hash,
+    name: name,
+    address: address,
+    city: city,
+    postal: postal,
+  });
+  await user.save();
+  return user;
+};
 
-const entrySchema = new mongoose.Schema({
-  title: String,
-  description: String,
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  address: String,
-  city: String,
-  postal: String,
-  price: Number,
-  priceCleaning: Number,
-  rooms: Number,
-  image: String,
-  userId: mongoose.Schema.Types.ObjectId,
-  amenities: {
-    familyFriendly: Boolean,
-    petsAllowed: Boolean,
-    smokingAllowed: Boolean,
-    aircon: Boolean,
-    balcony: Boolean,
-    bath: Boolean,
-    beach: Boolean,
-    elevator: Boolean,
-    freeParking: Boolean,
-    heating: Boolean,
-    kitchen: Boolean,
-    safe: Boolean,
-    selfCheckIn: Boolean,
-    ski: Boolean,
-    tv: Boolean,
-    washer: Boolean,
-    wifi: Boolean,
-  },
-});
+const getEntrys = async () => {
+  const entries = await Entry.find().exec();
+  return entries;
+};
 
+const getEntry = async (id) => {
+  const entry = await Entry.findById(id).exec();
+  return entry;
+};
 
-const Entry = mongoose.model("entry", entrySchema);
+const getEntrysByUserId = async (id) => {
+  const entries = await Entry.find({ userId: id }).exec();
+  return entries;
+};
+
+const createEntry = async (
+  title,
+  description,
+  address,
+  city,
+  postal,
+  price,
+  priceCleaning,
+  rooms,
+  image,
+  userId,
+  amenities
+) => {
+  const entry = Entry.create({
+    title,
+    description,
+    address,
+    city,
+    postal,
+    price,
+    priceCleaning,
+    rooms,
+    image,
+    userId,
+    amenities,
+  });
+  return entry;
+};
+
+const getUser = async (email) => {
+  const user = User.findOne({ email: email }).exec();
+  return user;
+}
+
+const db = {
+  login,
+  register,
+  getEntrys,
+  getEntry,
+  getEntrysByUserId,
+  createEntry,
+  checkUser,
+  getUser
+};
+
+export default db;

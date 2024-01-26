@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Bounce, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
+import api from "@/app/utils/api";
 
 const RegisterModal = ({ onClick }) => {
 
@@ -17,7 +18,7 @@ const RegisterModal = ({ onClick }) => {
     const [city, setCity] = useState('')
     const [postalCode, setPostalCode] = useState('')
 
-    const handleRegister = (e) => {
+    const handleRegister = async (e) => {
         e.preventDefault()
 
         if (!email || !name || !password || !address || !city || !postalCode) {
@@ -33,15 +34,8 @@ const RegisterModal = ({ onClick }) => {
               transition: Bounce,
               });
         }
+        const res = await api.register(email, password, name, address, city, postalCode);
         
-        axios.post('/api/register', { 
-          email: email,
-          name: name,
-          password: password,
-          address: address,
-          city: city,
-          postalCode: postalCode
-        }).then(res => {
           if (res.data.success) {
             toast.success('Registrierung erfolgreich', {
               position: "top-right",
@@ -70,7 +64,6 @@ const RegisterModal = ({ onClick }) => {
               transition: Bounce,
               });
           }
-        })
     }
 
 

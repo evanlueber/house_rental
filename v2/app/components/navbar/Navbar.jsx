@@ -8,7 +8,7 @@ import Rent from "./Rent";
 
 const Navbar = () => {
   return (
-    <div className="fixed w-full bg-black bg-opacity-40 z-10 shadow-sm shadow-gray-300 text-black">
+    <div className="fixed w-full bg-black z-20 shadow-sm shadow-gray-300 text-black">
       <div className="py-4 border-b ">
         <Container>
           <div className="flex flex-row items-center justify-between gap-3 md:gap-0">

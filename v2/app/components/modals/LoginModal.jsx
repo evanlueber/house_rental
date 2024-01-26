@@ -5,9 +5,12 @@ import { IoMdClose } from "react-icons/io";
 import Button from "../Button";
 import { useState } from "react";
 import { Bounce, ToastContainer, toast } from 'react-toastify';
-import { signIn } from "next-auth/react";
+import axios from "axios";
+import { useUserContext } from "@/app/context/UserContext";
+import api from "@/app/utils/api";
 
 const LoginModal = ({ onClick }) => {
+  const {setUser} = useUserContext()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -29,14 +32,9 @@ const LoginModal = ({ onClick }) => {
         });
     }
 
-    const res = await signIn("credentials", {
-      redirect: false,
-      email: email,       
-       password: password,
-      callbackUrl: "/",
-      });
+    const res = await api.login(email, password);
 
-    if (res.error) {
+    if (!res.data.success) {
         toast.error('Login fehlgeschlagen: ' + res.error, {
           position: "top-right",
           autoClose: 2000,
@@ -60,6 +58,7 @@ const LoginModal = ({ onClick }) => {
           theme: "dark",
           transition: Bounce,
           });
+          setUser(res.data.user)
           setTimeout(() => {
             onClick()
           }, 2000);

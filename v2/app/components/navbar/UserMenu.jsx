@@ -5,11 +5,14 @@ import { useState, useCallback } from "react";
 import MenuItem from "./MenuItem";
 import LoginModal from "../modals/LoginModal";
 import RegisterModal from "../modals/RegisterModal";
-import { useSession, signOut } from "next-auth/react";
 import { toast } from "react-toastify";
+import { useUserContext } from "@/app/context/UserContext";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const UserMenu = () => {
-  const session = useSession();
+  const router = useRouter();
+  const {user, setUser} = useUserContext();
   const [isOpen, setIsOpen] = useState(false);
   const [registerOpen, setRegisterOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
@@ -21,7 +24,7 @@ const UserMenu = () => {
 
   const handleLogout = () => {
     setLoggedIn(false);
-    signOut();
+    setUser(null)
     toast.success("Logout erfolgreich", {
       position: "top-right",
       autoClose: 2000,
@@ -32,18 +35,19 @@ const UserMenu = () => {
       progress: undefined,
       theme: "dark",
     });
+    router.push("/")
   }
 
   return (
     <div className="relative text-white ">
       <div className="flex flex-row items-center gap-3 ">
-        <button
-          onClick={() => {}}
-          className={"text-lg py-3 px-4 rounded-full hover:bg-[#1F1F1F] transition cursor-pointer text-white " + (!session.data?.user ? "opacity-0" : "block ")}
-          disabled={!session.data?.user}
+        <Link
+          className={"text-lg py-3 px-4 rounded-full hover:bg-[#1F1F1F] transition cursor-pointer text-white " + (user === null ? "opacity-0" : "block ")}
+          disabled={user === null}
+          href="/createEntry"
         >
           Neuer Eintrag +
-        </button>
+          </Link>
         <div
           onClick={toggleIsOpen}
           className=" p-4 md:py-1 md:px-2 gap-3 border-1 border hover:shadow-md hover:shadow-gray-300 border-white flex flex-row items-center rounded-full cursor-pointer transition"
@@ -58,9 +62,11 @@ const UserMenu = () => {
       {isOpen && (
         <div className="absolute rounded-xl shadow-md w-[40vw] md:w-3/4 overflow-hidden right-0 top-12 text-sm  bg-[#131313]">
           <div className="flex flex-col cursor-pointer">
-            {session.data?.user ? (
+            {user != null ? (
               <>
-                <MenuItem onClick={() => {}} label="Meine Einträge" />
+                <MenuItem onClick={() => {
+                  router.push("/myEntrys")
+                }} label="Meine Einträge" />
                 <MenuItem onClick={handleLogout} label="Logout" />
               </>
             ) : (

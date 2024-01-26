@@ -1,9 +1,10 @@
 import React from "react";
 import Button from "../../components/Button";
 import db from "../../libs/db";
+import api from "@/app/utils/api";
 
 const page = ({ params }) => {
-  const entry = db.getEntry(params.id);
+  const entry = api.getEntry(params.id);
   return (
     <div className="grid grid-cols-2">
       <div className="flex flex-col w-1/2 h-screen">
